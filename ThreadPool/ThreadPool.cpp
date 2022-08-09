@@ -17,6 +17,7 @@ public:
     void init(int threadNum  = 8, int maxRequest = 10000){
         m_threadNum = threadNum;
         m_maxRequest = maxRequest;
+        //在这里要init互斥锁，条件变量
         assert(threadNum > 0);
         for (int i = 0; i < m_threadNum; ++i) {
             thread(callback, getInstance()).detach();
@@ -73,5 +74,7 @@ private:
         shutdown = true;
         pthread_mutex_unlock(&mutex);
         pthread_cond_broadcast(&cond);
+
+        //在这里destroy吗？（前边broadcast刚完，其他唤醒用完没？）
     }
 };
